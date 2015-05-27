@@ -1,6 +1,6 @@
 {
   "name": "mosaic-intents",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Promise-based intents implementation",
   "main": "index.js",
   "scripts": {
