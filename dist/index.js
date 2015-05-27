@@ -60,19 +60,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	var _libIntent = __webpack_require__(1);
 
-	var Intent = _interopRequireWildcard(_libIntent);
+	var _libIntent2 = _interopRequireDefault(_libIntent);
 
 	var _libIntents = __webpack_require__(3);
 
-	var Intents = _interopRequireWildcard(_libIntents);
+	var _libIntents2 = _interopRequireDefault(_libIntents);
 
 	exports['default'] = {
-	    Intent: Intent,
-	    Intents: Intents };
+	    Intent: _libIntent2['default'],
+	    Intents: _libIntents2['default'] };
 	module.exports = exports['default'];
 
 /***/ },
