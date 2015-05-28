@@ -193,9 +193,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _createClass(Intents, [{
 	        key: 'intent',
 	        value: function intent(key, params) {
-	            var intent = this._newIntent(params);
+	            var intent = this._newIntent(key, params);
 	            try {
-	                intent.key = key;
 	                this.emit(key, intent);
 	            } catch (err) {
 	                intent.reject(err);
@@ -222,8 +221,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    }, {
 	        key: '_newIntent',
-	        value: function _newIntent(params) {
-	            return new _Intent2['default'](params);
+	        value: function _newIntent(key, params) {
+	            var intent = new _Intent2['default'](params);
+	            intent.key = key;
+	            return intent;
 	        }
 	    }]);
 
