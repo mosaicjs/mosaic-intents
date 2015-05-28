@@ -4,7 +4,8 @@
   "description": "Promise-based intents implementation",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -R spec ./test/index.js"
+    "test": "mocha -R spec ./test/index.js",
+    "bump": "npm version patch && git push && git push --tags"
   },
   "repository": {
     "type": "git",
