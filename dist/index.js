@@ -165,13 +165,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
 	var _events = __webpack_require__(4);
 
@@ -179,57 +173,57 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Intent2 = _interopRequireDefault(_Intent);
 
-	var Intents = (function (_EventEmitter) {
-	    function Intents() {
-	        _classCallCheck(this, Intents);
+	function Intents(obj) {
+	    obj = obj || this;
+	    _events.EventEmitter.apply(obj);
+	}
+	extend(Intents.prototype, {
+	    intent: function intent(key, params) {
+	        var intent = this._newIntent(key, params);
+	        try {
+	            this.emit(key, intent);
+	        } catch (err) {
+	            intent.reject(err);
+	        }
+	        return intent;
+	    },
+	    action: function action(key, params, _action) {
+	        if (_action === undefined) {
+	            _action = params;
+	            params = undefined;
+	        }
+	        var intent = this.intent(key, params);
+	        try {
+	            var result = _action.call(this, intent);
+	            if (result !== undefined && !intent.handled) {
+	                intent.resolve(result);
+	            }
+	        } catch (err) {
+	            intent.reject(err);
+	        }
+	        return intent;
+	    },
+	    _newIntent: function _newIntent(key, params) {
+	        var intent = new _Intent2['default'](params);
+	        intent.key = key;
+	        return intent;
+	    }
+	}, _events.EventEmitter.prototype);
 
-	        if (_EventEmitter != null) {
-	            _EventEmitter.apply(this, arguments);
+	Intents.addTo = function (Type) {
+	    extend(Type.prototype, Intents.prototype);
+	};
+
+	function extend(to) {
+	    for (var i = 1; i < arguments.length; i++) {
+	        var from = arguments[i];
+	        for (var key in from) {
+	            if (!to[key] && Object.prototype.hasOwnProperty.call(from, key)) {
+	                to[key] = from[key];
+	            }
 	        }
 	    }
-
-	    _inherits(Intents, _EventEmitter);
-
-	    _createClass(Intents, [{
-	        key: 'intent',
-	        value: function intent(key, params) {
-	            var intent = this._newIntent(key, params);
-	            try {
-	                this.emit(key, intent);
-	            } catch (err) {
-	                intent.reject(err);
-	            }
-	            return intent;
-	        }
-	    }, {
-	        key: 'action',
-	        value: function action(key, params, _action) {
-	            if (_action === undefined) {
-	                _action = params;
-	                params = undefined;
-	            }
-	            var intent = this.intent(key, params);
-	            try {
-	                var result = _action.call(this, intent);
-	                if (result !== undefined && !intent.handled) {
-	                    intent.resolve(result);
-	                }
-	            } catch (err) {
-	                intent.reject(err);
-	            }
-	            return intent;
-	        }
-	    }, {
-	        key: '_newIntent',
-	        value: function _newIntent(key, params) {
-	            var intent = new _Intent2['default'](params);
-	            intent.key = key;
-	            return intent;
-	        }
-	    }]);
-
-	    return Intents;
-	})(_events.EventEmitter);
+	}
 
 	exports['default'] = Intents;
 	module.exports = exports['default'];
