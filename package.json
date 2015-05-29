@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha -R spec ./test/index.js",
-    "bump": "npm version patch && git push && git push --tags"
+    "bump": "npm test && webpack && npm version patch && git push && git push --tags && npm publish",
+    "bump-minor": "npm run bump && npm version minor && git push && git push --tags && npm publish"
   },
   "repository": {
     "type": "git",
