@@ -96,7 +96,43 @@ function testIntents(MyClass){
                 expect(result).to.be(undefined);
                 expect(error).to.be('World!');
             }).then(done, done);
-        });        
+        });
+        it('listeners should be able to prevent actions execution',
+                function(done) {
+            var obj = new MyClass();
+            var params;
+            var result;
+            var error;
+            // A simple listener
+            obj.on('hello', function(intent){
+                params = intent.params;
+                intent.then(function(r){
+                    result = r;
+                }, function(err) {
+                    error = err;
+                });
+            });
+            // This handler resolves the intent before the action. So the real
+            // action should never be executed.
+            obj.on('hello', function(intent){
+                intent.resolve('WORLD!');
+            });
+            
+            expect(params).to.be(undefined);
+            expect(result).to.be(undefined);
+            var intent = obj.sayHelloWithError('Hello');
+            expect(error).to.be(undefined);
+            expect(intent.handled).to.be(true);
+    
+            expect(params).to.be('Hello');
+            expect(result).to.be(undefined);
+            expect(error).to.be(undefined);
+            
+            intent.then(function(result){
+                expect(params).to.be('Hello');
+                expect(result).to.be('WORLD!');
+            }).then(done, done);
+        });            
     });
 }
 describe('Intents', function(){
