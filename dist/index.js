@@ -194,9 +194,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        var intent = this.intent(key, params);
 	        try {
-	            var result = _action.call(this, intent);
-	            if (result !== undefined && !intent.handled) {
-	                intent.resolve(result);
+	            if (!intent.handled) {
+	                var result = _action.call(this, intent);
+	                if (result !== undefined && !intent.handled) {
+	                    intent.resolve(result);
+	                }
 	            }
 	        } catch (err) {
 	            intent.reject(err);
