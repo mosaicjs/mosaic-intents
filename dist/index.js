@@ -96,10 +96,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _promise2 = _interopRequireDefault(_promise);
 
 	var Intent = (function () {
-	    function Intent(params) {
+	    function Intent(params, key) {
 	        _classCallCheck(this, Intent);
 
 	        this._params = params;
+	        if (key) {
+	            this.key = key;
+	        }
 	        this._promise = new _promise2['default']((function (resolve, reject) {
 	            this._resolve = resolve;
 	            this._reject = reject;
@@ -180,6 +183,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	extend(Intents.prototype, {
 	    intent: function intent(key, params) {
 	        var intent = this._newIntent(key, params);
+	        return this.fireIntent(key, intent);
+	    },
+	    action: function action(key, params, _action) {
+	        if (_action === undefined) {
+	            _action = params;
+	            params = undefined;
+	        }
+	        var intent = this._newIntent(key, params);
+	        return this.runAction(key, intent, _action);
+	    },
+	    fireIntent: function fireIntent(key, intent) {
 	        try {
 	            this.emit(key, intent);
 	        } catch (err) {
@@ -187,15 +201,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return intent;
 	    },
-	    action: function action(key, params, _action) {
-	        if (_action === undefined) {
-	            _action = params;
-	            params = undefined;
-	        }
-	        var intent = this.intent(key, params);
+	    runAction: function runAction(key, intent, action) {
 	        try {
+	            intent = this.fireIntent(key, intent);
 	            if (!intent.handled) {
-	                var result = _action.call(this, intent);
+	                var result = action.call(this, intent);
 	                if (result !== undefined && !intent.handled) {
 	                    intent.resolve(result);
 	                }
@@ -206,9 +216,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return intent;
 	    },
 	    _newIntent: function _newIntent(key, params) {
-	        var intent = new _Intent2['default'](params);
-	        intent.key = key;
-	        return intent;
+	        return new _Intent2['default'](params, key);
 	    }
 	}, _events.EventEmitter.prototype);
 
