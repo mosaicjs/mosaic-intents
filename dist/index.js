@@ -106,15 +106,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _classCallCheck(this, Intent);
 
 	        _get(Object.getPrototypeOf(Intent.prototype), 'constructor', this).call(this);
-	        this._params = params;
+	        this.params = params;
 	        if (key) {
 	            this.key = key;
 	        }
-	        this._promise = new _promise2['default']((function (resolve, reject) {
-	            this._resolve = resolve;
-	            this._reject = reject;
+	        this.handled = false;
+	        this.promise = new _promise2['default']((function (resolve, reject) {
+	            this.resolve = function (result) {
+	                this.handled = true;
+	                resolve(result);
+	                return this;
+	            };
+	            this.reject = function (err) {
+	                this.handled = true;
+	                reject(err);
+	                return this;
+	            };
 	        }).bind(this));
-	        this._handled = false;
 	    }
 
 	    _inherits(Intent, _EventEmitter);
@@ -123,35 +131,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'then',
 	        value: function then() {
 	            return this.promise.then.apply(this.promise, arguments);
-	        }
-	    }, {
-	        key: 'params',
-	        get: function () {
-	            return this._params;
-	        }
-	    }, {
-	        key: 'handled',
-	        get: function () {
-	            return this._handled;
-	        }
-	    }, {
-	        key: 'promise',
-	        get: function () {
-	            return this._promise;
-	        }
-	    }, {
-	        key: 'resolve',
-	        value: function resolve(result) {
-	            this._handled = true;
-	            this._resolve(result);
-	            return this;
-	        }
-	    }, {
-	        key: 'reject',
-	        value: function reject(err) {
-	            this._handled = true;
-	            this._reject(err);
-	            return this;
 	        }
 	    }]);
 
