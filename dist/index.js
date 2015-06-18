@@ -111,7 +111,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.key = key;
 	        }
 	        this.handled = false;
-	        this.promise = new _promise2['default']((function (resolve, reject) {
+	        this._after = [];
+	        this._innerPromise = new _promise2['default']((function (resolve, reject) {
 	            this.resolve = function (result) {
 	                this.handled = true;
 	                resolve(result);
@@ -123,14 +124,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return this;
 	            };
 	        }).bind(this));
+	        this.promise = this._innerPromise.then((function (res) {
+	            if (this._after.length) {
+	                return _promise2['default'].all(this._after).then(function () {
+	                    return res;
+	                }, function (err) {
+	                    throw err;
+	                });
+	            }
+	            return res;
+	        }).bind(this));
 	    }
 
 	    _inherits(Intent, _EventEmitter);
 
 	    _createClass(Intent, [{
 	        key: 'then',
-	        value: function then() {
-	            return this.promise.then.apply(this.promise, arguments);
+	        value: function then(onResolve, onReject) {
+	            return this.promise.then(onResolve, onReject);
+	        }
+	    }, {
+	        key: 'after',
+
+	        /**
+	         * The specified action will be executed just after the main promise is
+	         * resolved.
+	         */
+	        value: function after(onResolve, onReject) {
+	            var res = this._innerPromise.then(onResolve, onReject);
+	            this._after.push(res);
+	            return res;
 	        }
 	    }]);
 
