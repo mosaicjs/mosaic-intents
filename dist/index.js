@@ -106,34 +106,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _classCallCheck(this, Intent);
 
 	        _get(Object.getPrototypeOf(Intent.prototype), 'constructor', this).call(this);
-	        this.params = params;
+	        var that = this;
+	        that.params = params;
 	        if (key) {
-	            this.key = key;
+	            that.key = key;
 	        }
-	        this.handled = false;
-	        this._after = [];
-	        this._innerPromise = new _promise2['default']((function (resolve, reject) {
-	            this.resolve = function (result) {
-	                this.handled = true;
+	        that.handled = false;
+	        that._after = [];
+	        that._innerPromise = new _promise2['default'](function (resolve, reject) {
+	            that.resolve = function (result) {
+	                that.handled = true;
 	                resolve(result);
-	                return this;
+	                return that;
 	            };
-	            this.reject = function (err) {
-	                this.handled = true;
+	            that.reject = function (err) {
+	                that.handled = true;
 	                reject(err);
-	                return this;
+	                return that;
 	            };
-	        }).bind(this));
-	        this.promise = this._innerPromise.then((function (res) {
-	            if (this._after.length) {
-	                return _promise2['default'].all(this._after).then(function () {
+	        });
+	        that.promise = that._innerPromise.then(function (res) {
+	            if (that._after.length) {
+	                return _promise2['default'].all(that._after).then(function () {
 	                    return res;
 	                }, function (err) {
 	                    throw err;
 	                });
 	            }
 	            return res;
-	        }).bind(this));
+	        });
 	    }
 
 	    _inherits(Intent, _EventEmitter);
