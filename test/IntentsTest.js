@@ -106,8 +106,6 @@ function testIntents(MyClass){
             expect(result).to.be(undefined);
             var intent = obj.sayHelloWithError('Hello');
             expect(error).to.be(undefined);
-            // The error was thrown synchronously
-            expect(intent.handled).to.be(true);
     
             expect(params).to.be('Hello');
             expect(result).to.be(undefined);

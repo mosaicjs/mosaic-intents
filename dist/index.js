@@ -220,14 +220,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return intent;
 	    },
 	    runAction: function runAction(key, intent, action) {
+	        var _this = this;
+
 	        try {
-	            intent = this.fireIntent(key, intent);
-	            if (!intent.handled) {
-	                var result = action.call(this, intent);
-	                if (result !== undefined && !intent.handled) {
-	                    intent.resolve(result);
+	            (function () {
+	                var that = _this;
+	                intent = that.fireIntent(key, intent);
+	                if (!intent.handled) {
+	                    Promise.resolve().then(function () {
+	                        var result = action.call(that, intent);
+	                        if (result !== undefined && !intent.handled) {
+	                            intent.resolve(result);
+	                        }
+	                    }).then(null, function (err) {
+	                        intent.reject(err);
+	                    });
 	                }
-	            }
+	            })();
 	        } catch (err) {
 	            intent.reject(err);
 	        }
