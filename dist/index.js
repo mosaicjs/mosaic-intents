@@ -70,9 +70,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _libIntents2 = _interopRequireDefault(_libIntents);
 
+	var _libSingleton = __webpack_require__(5);
+
+	var _libSingleton2 = _interopRequireDefault(_libSingleton);
+
 	exports['default'] = {
 	    Intent: _libIntent2['default'],
-	    Intents: _libIntents2['default'] };
+	    Intents: _libIntents2['default'],
+	    Singleton: _libSingleton2['default']
+	};
 	module.exports = exports['default'];
 
 /***/ },
@@ -255,6 +261,67 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	exports['default'] = Intents;
+	module.exports = exports['default'];
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _promise = __webpack_require__(2);
+
+	var _promise2 = _interopRequireDefault(_promise);
+
+	exports['default'] = {
+	    singlethonPromise: function singlethonPromise(method) {
+	        function runAction(params) {
+	            params = params || {};
+	            for (var key in params) {
+	                runAction.params[key] = params[key];
+	            }
+	            if (!runAction.promise) {
+	                runAction.promise = _promise2['default'].resolve().then(function (result) {
+	                    delete runAction.promise;
+	                    runAction.params = {};
+	                    return method.call(that, params);
+	                });
+	            }
+	            return runAction.promise;
+	        }
+	        runAction.params = {};
+	        runAction.promise;
+	        return runAction;
+	    },
+	    singlethonAction: function singlethonAction(that, actionName, action) {
+	        function runAction(params) {
+	            params = params || {};
+	            for (var key in params) {
+	                runAction.params[key] = params[key];
+	            }
+	            if (!runAction.intent) {
+	                runAction.intent = that.action(actionName, runAction.params, function (n) {
+	                    function clear() {
+	                        if (n === runAction.intent) {
+	                            runAction.params = {};
+	                            delete runAction.intent;
+	                        }
+	                    }
+	                    n.after(clear, clear);
+	                    return action.call(that, n);
+	                });
+	            }
+	            return runAction.intent;
+	        }
+	        runAction.params = {};
+	        return runAction;
+	    } };
 	module.exports = exports['default'];
 
 /***/ }
