@@ -280,7 +280,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _promise2 = _interopRequireDefault(_promise);
 
 	exports['default'] = {
-	    singlethonPromise: function singlethonPromise(method) {
+	    singletonPromise: function singletonPromise(method) {
 	        function runAction(params) {
 	            params = params || {};
 	            for (var key in params) {
@@ -299,7 +299,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        runAction.promise;
 	        return runAction;
 	    },
-	    singlethonAction: function singlethonAction(that, actionName, action) {
+	    singletonAction: function singletonAction(that, actionName, action) {
 	        function runAction(params) {
 	            params = params || {};
 	            for (var key in params) {
