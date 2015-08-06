@@ -141,6 +141,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            return res;
 	        });
+	        that.finalize = that['finally'] = function (method) {
+	            return that.then(function (result) {
+	                try {
+	                    method(null, result);
+	                } catch (e) {}
+	                return result;
+	            }, function (err) {
+	                try {
+	                    method(err);
+	                } catch (e) {}
+	                throw err;
+	            });
+	        };
 	    }
 
 	    _inherits(Intent, _EventEmitter);
