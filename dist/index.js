@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("promise"), require("events"));
+		module.exports = factory(require("events"));
 	else if(typeof define === 'function' && define.amd)
-		define(["promise", "events"], factory);
+		define(["events"], factory);
 	else {
-		var a = typeof exports === 'object' ? factory(require("promise"), require("events")) : factory(root["promise"], root["events"]);
+		var a = typeof exports === 'object' ? factory(require("events")) : factory(root["events"]);
 		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
 	}
-})(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_2__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -66,11 +66,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _libIntent2 = _interopRequireDefault(_libIntent);
 
-	var _libIntents = __webpack_require__(4);
+	var _libIntents = __webpack_require__(3);
 
 	var _libIntents2 = _interopRequireDefault(_libIntents);
 
-	var _libSingleton = __webpack_require__(5);
+	var _libSingleton = __webpack_require__(4);
 
 	var _libSingleton2 = _interopRequireDefault(_libSingleton);
 
@@ -95,17 +95,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _promise = __webpack_require__(2);
-
-	var _promise2 = _interopRequireDefault(_promise);
-
-	var _events = __webpack_require__(3);
+	var _events = __webpack_require__(2);
 
 	var Intent = (function (_EventEmitter) {
 	    function Intent(params, key) {
@@ -119,7 +113,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        that.handled = false;
 	        that._after = [];
-	        that._innerPromise = new _promise2['default'](function (resolve, reject) {
+	        that._innerPromise = new Promise(function (resolve, reject) {
 	            that.resolve = function (result) {
 	                that.handled = true;
 	                resolve(result);
@@ -133,7 +127,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	        that.promise = that._innerPromise.then(function (res) {
 	            if (that._after.length) {
-	                return _promise2['default'].all(that._after).then(function () {
+	                return Promise.all(that._after).then(function () {
 	                    return res;
 	                }, function (err) {
 	                    throw err;
@@ -191,12 +185,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 3 */
-/***/ function(module, exports) {
-
-	module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
-
-/***/ },
-/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -207,7 +195,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _events = __webpack_require__(3);
+	var _events = __webpack_require__(2);
 
 	var _Intent = __webpack_require__(1);
 
@@ -277,22 +265,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
+/* 4 */
+/***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _promise = __webpack_require__(2);
-
-	var _promise2 = _interopRequireDefault(_promise);
-
-	exports['default'] = {
+	exports["default"] = {
 	    singletonPromise: function singletonPromise(method) {
 	        function runAction(params) {
 	            params = params || {};
@@ -300,7 +281,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                runAction.params[key] = params[key];
 	            }
 	            if (!runAction.promise) {
-	                runAction.promise = _promise2['default'].resolve().then(function (result) {
+	                runAction.promise = Promise.resolve().then(function (result) {
 	                    delete runAction.promise;
 	                    runAction.params = {};
 	                    return method.call(that, params);
@@ -335,7 +316,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        runAction.params = {};
 	        return runAction;
 	    } };
-	module.exports = exports['default'];
+	module.exports = exports["default"];
 
 /***/ }
 /******/ ])
